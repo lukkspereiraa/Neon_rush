@@ -3,10 +3,11 @@ import 'package:flutter_lista_com_descricao_app/_common/minhas_cores.dart';
 import 'package:flutter_lista_com_descricao_app/components/decoration_text_form_fild.dart';
 import 'package:flutter_lista_com_descricao_app/mods/exercicio_modl.dart';
 import 'package:flutter_lista_com_descricao_app/mods/caracteristicas_do_trino_modelo.dart';
+import 'package:flutter_lista_com_descricao_app/services/caracteristica_trino_servicos.dart';
 import 'package:flutter_lista_com_descricao_app/services/exercicio_servico.dart';
 import 'package:uuid/uuid.dart';
 
-mostarModalInicio(BuildContext context, {ExercicioModelo? exercicio}) {
+mostarAdicinarEditarExercicioModal(BuildContext context, {ExercicioModelo? exercicio}) {
   showModalBottomSheet(
     context: context,
     backgroundColor: MinhasCores.padraoTopGradiente,
@@ -220,15 +221,15 @@ class _ExercicioState extends State<ExercicioModal> {
 
     _exercicioServico.adicinarExercicio(exercico).then((value) {
       if (series  != "" || repeticao != "" || carga != "") {
-        CaracteristicasDoTreinoModelo sentimento =
+        CaracteristicasDoTreinoModelo volumeDeTreino =
             CaracteristicasDoTreinoModelo(
                 id: const Uuid().v1(),
                 data: DateTime.now().toString(),
                 carga: carga,
                 series: series,
                 repeticao: repeticao);
-        _exercicioServico
-            .adicinarCaracteristaDoTreino(exercico.id, sentimento)
+        CaracteristicasDeTreinoServico()
+            .adicinarCaracteristaDoTreino( idExercicio: exercico.id, caracteristicaDotrinoModelo: volumeDeTreino)
             .then((value) {
           setState(() {
             isCarregando = false;

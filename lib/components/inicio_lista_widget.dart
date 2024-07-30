@@ -4,7 +4,7 @@ import 'package:flutter_lista_com_descricao_app/_common/minhas_cores.dart';
 import 'package:flutter_lista_com_descricao_app/mods/exercicio_modl.dart';
 import 'package:flutter_lista_com_descricao_app/services/exercicio_servico.dart';
 
-import '../_common/inicio_modal.dart';
+import 'adicinar_editra_exercicio_modal.dart';
 import '../screens/exercicio.dart';
 
 class InicioItemLista extends StatelessWidget {
@@ -87,8 +87,9 @@ class InicioItemLista extends StatelessWidget {
                         children: [
                           IconButton(
                               icon: const Icon(Icons.edit),
-                              onPressed: () => mostarModalInicio(context,
-                                  exercicio: exercicioModelo)),
+                              onPressed: () =>
+                                  mostarAdicinarEditarExercicioModal(context,
+                                      exercicio: exercicioModelo)),
                           IconButton(
                             onPressed: () {
                               SnackBar snackBar = SnackBar(

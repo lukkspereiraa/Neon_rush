@@ -1,8 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_lista_com_descricao_app/_common/inicio_modal.dart';
+
 import 'package:flutter_lista_com_descricao_app/_common/minhas_cores.dart';
+import 'package:flutter_lista_com_descricao_app/components/adicinar_editra_exercicio_modal.dart';
 import 'package:flutter_lista_com_descricao_app/components/inicio_lista_widget.dart';
+
 import 'package:flutter_lista_com_descricao_app/mods/exercicio_modl.dart';
 import 'package:flutter_lista_com_descricao_app/services/autenticacao_services.dart';
 import 'package:flutter_lista_com_descricao_app/services/exercicio_servico.dart';
@@ -68,7 +70,7 @@ class _InicioTelaState extends State<InicioTela> {
             color: Colors.white,
           ),
           onPressed: () {
-            mostarModalInicio(context);
+            mostarAdicinarEditarExercicioModal(context);
           },
         ),
         body: Padding(

@@ -1,26 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_lista_com_descricao_app/_common/minhas_cores.dart';
+import 'package:flutter_lista_com_descricao_app/components/adincar_editar_caracteristicas_de_trino_modal.dart';
 import 'package:flutter_lista_com_descricao_app/mods/exercicio_modl.dart';
 import 'package:flutter_lista_com_descricao_app/mods/caracteristicas_do_trino_modelo.dart';
+import 'package:flutter_lista_com_descricao_app/services/caracteristica_trino_servicos.dart';
 
 class ExercicoTela extends StatelessWidget {
   final ExercicioModelo exercicioModelo;
   ExercicoTela({super.key, required this.exercicioModelo});
 
-  final List<CaracteristicasDoTreinoModelo> listaDeCaracteristicasDosTreinos = [
-    CaracteristicasDoTreinoModelo(
-        id: '001',
-        data: '2024-02-21',
-        carga: "20 kg",
-        repeticao: "12",
-        series: "4"),
-    CaracteristicasDoTreinoModelo(
-        id: "002",
-        data: "2024-03-21",
-        series: "4",
-        carga: "20 kg",
-        repeticao: "12"),
-  ];
+  CaracteristicasDeTreinoServico _caracteristicasDeTreinoServico =
+      CaracteristicasDeTreinoServico();
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +43,10 @@ class ExercicoTela extends StatelessWidget {
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(100))),
         backgroundColor: MinhasCores.escuraPadrao,
-        onPressed: () {},
+        onPressed: () {
+          mostarAdicinarEditarCaracteristicasDoTreinoDialog(context,
+              idExercicio: exercicioModelo.id);
+        },
         child: const Icon(
           Icons.add,
           color: Colors.white,
@@ -125,33 +118,65 @@ class ExercicoTela extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 8),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: List.generate(
-                listaDeCaracteristicasDosTreinos.length,
-                (index) {
-                  CaracteristicasDoTreinoModelo treinoDeAtual =
-                      listaDeCaracteristicasDosTreinos[index];
-                  return ListTile(
-                    dense: true,
-                    contentPadding: EdgeInsets.zero,
-                    title: Text(
-                        "${treinoDeAtual.series} de ${treinoDeAtual.repeticao}"),
-                    subtitle: Text(
-                        "${treinoDeAtual.carga} carga da data ${treinoDeAtual.data}"),
-                    leading: const Icon(Icons.double_arrow_rounded),
-                    trailing: IconButton(
-                      icon: const Icon(
-                        Icons.delete,
-                        color: Colors.red,
+            StreamBuilder(
+              stream: _caracteristicasDeTreinoServico.conectarSream(
+                  idExercicio: exercicioModelo.id),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                } else {
+                  if (snapshot.hasData &&
+                      snapshot.data != null &&
+                      snapshot.data!.docs.isNotEmpty) {
+                    final List<CaracteristicasDoTreinoModelo>
+                        listaDeCaracteristicasDosTreinos = [];
+
+                    for (var doc in snapshot.data!.docs) {
+                      listaDeCaracteristicasDosTreinos.add(
+                          CaracteristicasDoTreinoModelo.fromMap(doc.data()));
+                    }
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: List.generate(
+                        listaDeCaracteristicasDosTreinos.length,
+                        (index) {
+                          CaracteristicasDoTreinoModelo treinoDeAtual =
+                              listaDeCaracteristicasDosTreinos[index];
+                          return ListTile(
+                            dense: true,
+                            contentPadding: EdgeInsets.zero,
+                            title: Text(
+                                "${treinoDeAtual.series} de ${treinoDeAtual.repeticao}"),
+                            subtitle: Text(
+                                "${treinoDeAtual.carga} carga da data ${treinoDeAtual.data}"),
+                            leading: const Icon(Icons.double_arrow_rounded),
+                            trailing: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                IconButton(
+                                  icon: const Icon(
+                                    Icons.delete,
+                                    color: Colors.red,
+                                  ),
+                                  onPressed: () {
+                                    _caracteristicasDeTreinoServico
+                                        .removerCaracteristicas(
+                                            exercicioId: exercicioModelo.id,
+                                            caracteristicasId: treinoDeAtual.id);
+                                  },
+                                ),
+                              ],
+                            ),
+                          );
+                        },
                       ),
-                      onPressed: () {
-                        print("Deletear ${treinoDeAtual.data}");
-                      },
-                    ),
-                  );
-                },
-              ),
+                    );
+                  } else {
+                    return const Text(
+                        "Nenhuma anotcao do seu volume de treino");
+                  }
+                }
+              },
             )
           ],
         ),

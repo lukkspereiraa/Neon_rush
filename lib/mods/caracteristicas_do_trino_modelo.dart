@@ -14,17 +14,17 @@ class CaracteristicasDoTreinoModelo {
   CaracteristicasDoTreinoModelo.fromMap(Map<String, dynamic> map)
       : id = map["id"],
         data = map["data"],
-        repeticao = map["repeticao"],
         carga = map["carga"],
+        repeticao = map["repeticao"],
         series = map["series"];
 
   Map<String, dynamic> toMap() {
     return {
       "id": id,
       "data": data,
-      carga: "carga",
-      repeticao: "repeticao",
-      series: "series"
+      "carga": carga,
+      "repeticao": repeticao,
+      "series": series
     };
   }
 }

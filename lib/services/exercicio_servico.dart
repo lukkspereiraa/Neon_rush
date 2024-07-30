@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter_lista_com_descricao_app/mods/exercicio_modl.dart';
-import 'package:flutter_lista_com_descricao_app/mods/caracteristicas_do_trino_modelo.dart';
 
 class ExercicioServico {
   String userId;
@@ -17,15 +16,6 @@ class ExercicioServico {
         .set(exercicioModelo.toMap());
   }
 
-  Future<void> adicinarCaracteristaDoTreino(String idExercicio,
-      CaracteristicasDoTreinoModelo caracteristicaDotrinoModelo) async {
-    return await _firestore
-        .collection(userId)
-        .doc(idExercicio)
-        .collection("caracteristicas")
-        .doc(caracteristicaDotrinoModelo.id)
-        .set(caracteristicaDotrinoModelo.toMap());
-  }
 
   Stream<QuerySnapshot<Map<String, dynamic>>> conecatarStreamExercicios(
       bool isDecresent) {
