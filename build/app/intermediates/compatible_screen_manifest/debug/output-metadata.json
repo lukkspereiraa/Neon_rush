@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "artifactType": {
+    "type": "COMPATIBLE_SCREEN_MANIFEST",
+    "kind": "Directory"
+  },
+  "applicationId": "lucas.pereira.flutter_lista_com_descricao_app",
+  "variantName": "debug",
+  "elements": []
+}
